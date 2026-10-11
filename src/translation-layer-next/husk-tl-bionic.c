@@ -484,7 +484,9 @@ static void bionic___cxa_finalize(void *dso)
 
 /* -------------------------------------------------------- system queries */
 
-static unsigned long bionic_getauxval(unsigned long type)
+unsigned long tl_bionic_getauxval(unsigned long type);
+static unsigned long bionic_getauxval(unsigned long type) { return tl_bionic_getauxval(type); }
+unsigned long tl_bionic_getauxval(unsigned long type)
 {
     static uint8_t random16[16] = { 0x4a, 0x13, 0x9c, 0x71, 0xe2, 0x05, 0x88, 0x3d, 0xb6, 0x21, 0x5f, 0xc4, 0x90, 0x2e, 0x67, 0xd8 };
     switch (type) {
@@ -879,6 +881,8 @@ bool tl_bionic_is_system_lib(const char *soname)
         "libc.so", "libm.so", "libdl.so", "liblog.so", "libandroid.so", "libEGL.so", "libGLESv1_CM.so",
         "libGLESv2.so", "libGLESv3.so", "libz.so", "libmediandk.so", "libOpenSLES.so", "libaaudio.so",
         "libvulkan.so", "libnativewindow.so", "libjnigraphics.so", "libcamera2ndk.so", "libstdc++.so",
+        /* the rest of the NDK's libraries an app may list as needed without calling much in them (Roblox needs OpenMAX AL) */
+        "libOpenMAXAL.so", "libneuralnetworks.so", "libbinder_ndk.so", "libsync.so", "libamidi.so",
         /* the Java runtime's: answered by Husk (husk-tl-dvm-jvm.c), never loaded */ "libopenjdkjvm.so", "libdl_android.so", "libart.so", NULL };
     for (int i = 0; sys[i]; i++) if (!strcmp(sys[i], soname)) return true;
     return false;
