@@ -62,6 +62,9 @@ jobs:
       - name: 構建 Rust pairing
         run: ./scripts/build_rppairing_ios.sh
       
+      - name: 構建 Java Runtime
+        run: ./scripts/build_java_runtime.sh
+      
       - name: 打包 IPA
         run: |
           mkdir -p build
